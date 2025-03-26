@@ -81,7 +81,6 @@ const getChannelFeed = async (channelId: string) => {
   const { feed } = await parseStringPromise(feedData);
 
   const { author: authors, entry: videos, title } = feed;
-  console.log(feed);
 
   const links = feed.link?.map((link: { $: string }) => link.$);
 
