@@ -3,34 +3,40 @@
   "bucket": "",
   "preset": "javascript",
   "env": "production",
-  "prefix": "",
-  "not-first-run": false,
+  "prefix": "20250326123621",
+  "not-first-run": true,
   "function": {
-    "id": 0,
+    "id": 41822,
     "name": "__DEFAULT__",
-    "file": "./out/worker.js",
+    "file": ".edge/worker.js",
     "args": "./azion/args.json",
-    "instance-id": 0,
+    "instance-id": 39520,
     "instance-name": "__DEFAULT__",
-    "cache-id": 0
+    "cache-id": 222668
   },
   "application": {
-    "id": 0,
+    "id": 1743006597,
     "name": "__DEFAULT__"
   },
   "domain": {
-    "id": 0,
-    "name": "__DEFAULT__",
-    "domain_name": "",
-    "url": ""
+    "id": 1743005228,
+    "name": "youtube-feed",
+    "domain_name": "yv88ungobt.map.azionedge.net",
+    "url": "https://yv88ungobt.map.azionedge.net"
   },
   "rt-purge": {
     "purge_on_publish": true
   },
-  "origin": null,
+  "origin": [],
   "rules-engine": {
     "created": false,
-    "rules": null
+    "rules": [
+      {
+        "id": 386355,
+        "name": "Execute Edge Function",
+        "phase": "request"
+      }
+    ]
   },
-  "cache-settings": null
+  "cache-settings": []
 }
