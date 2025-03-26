@@ -1,35 +1,30 @@
-# Simple Typescript Router
+# Youtube Channel Data Edge Service
 
-The Azion **Simple Typescript Router** is designed to simplify and enhance the deployment process for Typescript applications directly on the edge of the network.
+This service is responsible for fetching the data from the Youtube Feed and parse it to json format.
 
-## Usage Information
+## How to run the service
 
-_Install dependencies_
+1. Clone the repository
+2. Run the following command to install the dependencies
 
 ```bash
-
 npm install
-#or
-yarn install
-#or
-pnmp install
-
 ```
 
-To start using this template with **Vulcan**, you need to:
-
-_Build Command_: To run the application build command
+3. Run the following command to start the service
 
 ```bash
-
-npx edge-functions@latest build
-
+npx azion dev
 ```
 
-_Run local DEV_: To run the application locally with Vulcan
+4. The service will be running on the port 3000
 
-```bash
+## Endpoints
 
-npx edge-functions@latest dev
+### GET /?channelId OR /?channelUrl
 
-```
+This endpoint is responsible for fetching the data from the Youtube Feed and parse it to json format.
+
+### GET /last-video?channelId or /last-video?channelUrl
+
+This endpoint is responsible for fetching the last video from the Youtube Feed and parse it to json format.
