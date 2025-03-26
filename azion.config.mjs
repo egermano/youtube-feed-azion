@@ -5,7 +5,7 @@ export default defineConfig({
     entry: 'src/index.ts',
     worker: true,
     preset: {
-      name: 'typescript',
+      name: '',
     },
   },
 });
