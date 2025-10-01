@@ -1,9 +1,9 @@
 {
   "name": "youtube-feed",
-  "bucket": "",
+  "bucket": "youtube-feed",
   "preset": "javascript",
   "env": "production",
-  "prefix": "20250326123621",
+  "prefix": "20251001164952",
   "not-first-run": true,
   "function": {
     "id": 41822,
