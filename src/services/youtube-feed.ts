@@ -1,4 +1,4 @@
-import { parseStringPromise } from "xml2js";
+import { XMLParser } from "fast-xml-parser";
 
 export const isValidYoutubeChannelUrl = (urlString: string): boolean => {
   try {
@@ -26,7 +26,7 @@ export const isValidYoutubeChannelUrl = (urlString: string): boolean => {
   }
 };
 
-export const getExternalId = async (youtubeUrl: string) => {
+export const getExternalId = async (youtubeUrl: string): Promise<string> => {
   try {
     const res = await fetch(youtubeUrl);
     const html = await res.text();
@@ -37,7 +37,7 @@ export const getExternalId = async (youtubeUrl: string) => {
     if (match && match[1]) {
       return match[1];
     } else {
-      return null;
+      throw new Error("Unable to find externalId");
     }
   } catch (err) {
     if (err instanceof Error) {
@@ -45,6 +45,8 @@ export const getExternalId = async (youtubeUrl: string) => {
     } else {
       console.error("Error on finding externalId:", err);
     }
+
+    throw new Error("Unable to find externalId");
   }
 };
 
@@ -57,6 +59,8 @@ const fetchFeed = async (channelId: string) => {
           "Content-Type": "text/xml; charset=UTF-8",
           accept: "text/xml; charset=UTF-8",
           pragma: "no-cache",
+          "User-Agent":
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
         },
       }
     );
@@ -69,7 +73,7 @@ const fetchFeed = async (channelId: string) => {
   }
 };
 
-const getChannelFeed = async (channelId: string) => {
+export const getChannelFeed = async (channelId: string) => {
   // TODO: Improve the channel ID validation
   if (!channelId || channelId.length < 1) {
     throw new Error("Invalid channel ID");
@@ -77,18 +81,22 @@ const getChannelFeed = async (channelId: string) => {
 
   const feedData = await fetchFeed(channelId);
 
-  //   try {
-  const { feed } = await parseStringPromise(feedData);
+  try {
+    const parser = new XMLParser();
+    const { feed } = parser.parse(feedData);
 
-  const { author: authors, entry: videos, title } = feed;
+    const { author: authors, entry: videos, title } = feed;
+    console.log(authors, videos, title);
 
-  const links = feed.link?.map((link: { $: string }) => link.$);
+    const links = feed.link?.map((link: { $: string }) => link.$);
 
-  return { authors, videos, links, title: title[0] };
-  //   } catch (err) {
-  //     const newErr = new Error("Error parsing youtube channel feed data.");
-  //     throw Object.assign(newErr, err);
-  //   }
+    return { authors, videos, links, title: title[0] };
+    // return feed;
+  } catch (err) {
+    console.log(err);
+    const newErr = new Error("Error parsing youtube channel feed data.");
+    throw Object.assign(newErr, err);
+  }
 };
 
 export const getChannelVideos = async (channelId: string) => {
@@ -97,7 +105,7 @@ export const getChannelVideos = async (channelId: string) => {
 
     return videos;
   } catch (error) {
-    console.dir(error);
+    console.log(error);
   }
 };
 
@@ -107,7 +115,7 @@ export const getLastVideo = async (channelId: string) => {
 
     return videos?.[0];
   } catch (error) {
-    console.dir(error);
+    console.log(error);
   }
 };
 

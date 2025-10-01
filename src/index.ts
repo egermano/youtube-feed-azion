@@ -1,7 +1,25 @@
 import { Hono } from "hono";
-import { getChannelVideos, getExternalId, getLastVideo, isValidYoutubeChannelUrl } from "./services/youtube-feed";
+import { cors } from "hono/cors";
+import {
+  getChannelVideos,
+  getExternalId,
+  getLastVideo,
+  isValidYoutubeChannelUrl,
+} from "./services/youtube-feed";
 
 const app = new Hono();
+
+app.use(
+  "*",
+  cors({
+    origin: [
+      "https://me.egermano.com",
+      "https://console.azion.com",
+      "http://localhost:3000",
+    ],
+    maxAge: 86400,
+  })
+);
 
 // TODO: improve query validation and refactoring similar logic in differente routes
 
@@ -29,7 +47,7 @@ app.get("/", async (c) => {
       return c.json({ error: "Invalid Youtube channel URL" }, 400);
     }
 
-    channelId = (await getExternalId(channelUrl)) as string;
+    channelId = await getExternalId(channelUrl);
   }
 
   if (!channelId) {
@@ -71,13 +89,13 @@ app.get("/last-video", async (c) => {
       return c.json({ error: "Invalid Youtube channel URL" }, 400);
     }
 
-    channelId = (await getExternalId(channelUrl)) as string;
+    channelId = await getExternalId(channelUrl);
   }
 
   if (!channelId) {
     return c.json({ error: "Unable to validate the Youtube channel ID" }, 400);
   }
-  
+
   try {
     const video = await getLastVideo(channelId);
 
